@@ -10,7 +10,7 @@ const reducer = (state, action) => {
         case 'INCREASE':
             let tempCart = state.cart.map((cartItem) => {
                 if (cartItem.id === action.payload) {
-                    return {...cartItem, amount: cartItem.amount + 1}
+                    return { ...cartItem, amount: cartItem.amount + 1 }
                 }
                 return cartItem
             });
@@ -29,9 +29,26 @@ const reducer = (state, action) => {
                 ...state,
                 cart: tempCart2
             }
+        case 'GET_TOTALS':
+            let { total, amount } = state.cart.reduce((cartTotal, cartItem) => {
+                const { price, amount } = cartItem;
+                const itemTotal = price * amount;
+
+                cartTotal.amount += amount
+                cartTotal.total += itemTotal
+                return cartTotal
+            }, {
+                total: 0,
+                amount: 0,
+            }
+            )
+            total = parseFloat(total.toFixed(2))
+
+            return { ...state, total, amount };
         default:
             return state;
     }
 }
 
 export default reducer
+
