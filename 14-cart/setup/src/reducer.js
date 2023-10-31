@@ -45,8 +45,26 @@ const reducer = (state, action) => {
             total = parseFloat(total.toFixed(2))
 
             return { ...state, total, amount };
+        case 'LOADING':
+            return { ...state, loading: true };
+        case 'DISPLAY_ITEMS':
+            return { ...state, cart: action.payload, loading: false };
+        case 'TOGGLE_AMOUNT':
+            let tempCart3 = state.cart.map((cartItem)=>{
+                if(cartItem.id === action.payload.id){
+                    if(action.payload.type === 'inc'){
+                        return { ...cartItem, amount: cartItem.amount + 1 }
+                    } 
+                    if (action.payload.type === 'dec'){
+                        return { ...cartItem, amount: cartItem.amount - 1 }
+                    }
+                }
+                return cartItem
+            }).filter((cartItem) => cartItem.amount !== 0)
+            return {...state, cart:tempCart3}
         default:
-            return state;
+            throw new Error('nei dziala bo, no matching action type')
+            
     }
 }
 

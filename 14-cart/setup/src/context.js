@@ -17,20 +17,36 @@ const initialState = {
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const clearCart = () => {dispatch({ type: 'CLEAR_CART' })}
+  const clearCart = () => { dispatch({ type: 'CLEAR_CART' }) }
 
   const remove = (id) => {
-    dispatch({type: 'REMOVE',payload: id})}
+    dispatch({ type: 'REMOVE', payload: id })
+  }
 
-  const increase = (id) => {dispatch({type: 'INCREASE',payload: id})}
+  const increase = (id) => { dispatch({ type: 'INCREASE', payload: id }) }
 
   const decrease = (id) => {
-    dispatch({type: 'DECREASE',payload: id})}
+    dispatch({ type: 'DECREASE', payload: id })
+  }
 
   useEffect(() => {
-    dispatch({type: 'GET_TOTALS'})
+    dispatch({ type: 'GET_TOTALS' })
   }, [state.cart])
 
+  const fetchData = async () => {
+    dispatch({ type: 'LOADING' });
+    const respose = await fetch(url);
+    const cart = await respose.json();
+    dispatch({ type: 'DISPLAY_ITEMS', payload: cart })
+  }
+
+  const toggleAmount = (id, type) => {
+    dispatch({ type: 'TOGGLE_AMOUNT', payload: { id, type } })
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <AppContext.Provider
@@ -40,6 +56,7 @@ const AppProvider = ({ children }) => {
         remove,
         increase,
         decrease,
+        toggleAmount,
       }}
     >
       {children}
