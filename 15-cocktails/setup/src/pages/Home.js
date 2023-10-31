@@ -5,7 +5,7 @@ import SearchForm from '../components/SearchForm'
 const Home = () => {
   return (
     <div>
-      <h2>home page</h2>
+      <h2>home pasfasfge</h2>
     </div>
   )
 }
